@@ -1,0 +1,15 @@
+#SBT
+target
+project/target
+
+#Metals + Bloop build server
+.metals
+.bloop
+
+# IntelliJ
+.idea
+.idea_modules
+*.iml
+*.ipr
+*.iws
+.history
