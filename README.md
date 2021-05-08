@@ -10,3 +10,6 @@ This application reads data from a topic containing parquet files and splits tho
 - run e2e test with cucumber
 - "extends App" is threading an issue here?
 - run app within docker
+- update sbt version
+- run tests in CI (GitHub actions?)
+- try other parquet packages

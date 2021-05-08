@@ -9,4 +9,5 @@
     <root level="${LOG_LEVEL}">
         <appender-ref ref="console"/>
     </root>
+    <logger name="org.apache.hadoop.util.NativeCodeLoader" level="ERROR"/>
 </configuration>

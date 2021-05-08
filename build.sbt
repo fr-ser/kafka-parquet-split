@@ -3,7 +3,6 @@ name := "parquet-split"
 version := "1.0.0"
 
 scalaVersion := "2.13.5"
-// For Settings/Task reference, see http://www.scala-sbt.org/release/sxr/sbt/Keys.scala.html
 
 lazy val kafkaVersion = "2.6.2"
 
@@ -11,6 +10,9 @@ libraryDependencies ++= Seq(
   // Kafka
   "org.apache.kafka" %% "kafka-streams-scala" % kafkaVersion,
   "org.apache.kafka" % "kafka-streams-test-utils" % kafkaVersion % "test",
+  // parquet
+  "com.github.mjakubowski84" %% "parquet4s-core" % "1.9.1",
+  "org.apache.hadoop" % "hadoop-client" % "3.3.0",
   // config loading
   "com.github.pureconfig" %% "pureconfig" % "0.15.0",
   // logging
