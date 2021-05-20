@@ -24,7 +24,7 @@ class ParquetSplitTest extends AnyFlatSpec with Matchers {
   }
   private val appConfig = ConfigSource.default.loadOrThrow[AppConfig]
 
-  "The BatchSplit" should "split and pipe through individual messages" in {
+  "The ParquetSplit" should "split and pipe through individual messages" in {
     val driver = new TopologyTestDriver(ParquetSplit.getTopology(appConfig), topologyConfig)
 
     try {
