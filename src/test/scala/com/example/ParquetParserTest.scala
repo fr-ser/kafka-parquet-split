@@ -27,7 +27,9 @@ class ParquetParserTest extends AnyFlatSpec with Matchers {
     }
   }
 
-  "The ParquetParser" should "convert the rows to valid json" in {
+  behavior of "ParquetParser"
+
+  it should "convert the rows to valid json" in {
     val tmpPath = Paths.get(Files.createTempDirectory("test").toString, "file.parquet").toString
     case class TestRow(
       id: Int,
@@ -53,7 +55,11 @@ class ParquetParserTest extends AnyFlatSpec with Matchers {
     ParquetParser.parseAndSplit(byteArray) shouldBe expected
   }
 
-  "The ParquetParser" should "return a Left for invalid parquet ArrayBuffers" in {
-    ParquetParser.parseAndSplit(Array[Byte](12.toByte, 144.toByte)).isLeft shouldBe true
+  it should "return a ParsingError" in {
+    (ParquetParser.parseAndSplit(Array[Byte](10, -32, 17, 22)) match {
+      case Left(ParsingError(_)) => "ParsingError"
+      case Left(_)               => "Left - Non-ParsingError"
+      case _                     => "Other"
+    }) shouldBe "ParsingError"
   }
 }

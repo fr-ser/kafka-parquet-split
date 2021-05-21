@@ -5,7 +5,6 @@ This application reads data from a topic containing parquet files and splits tho
 
 ## ToDos
 
-- split Parquet into rows of JSON
 - publish to kafka rows as JSON
 - run e2e test with cucumber
 - "extends App" is threading an issue here?

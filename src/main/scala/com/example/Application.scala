@@ -11,7 +11,7 @@ import java.time.Duration
 object Application extends App with LazyLogging {
   val appConfig = ConfigSource.default.loadOrThrow[AppConfig]
 
-  val topology = ParquetSplit.getTopology(appConfig)
+  val topology = ParquetSplit().getTopology(appConfig)
 
   logger.info(topology.describe.toString)
 

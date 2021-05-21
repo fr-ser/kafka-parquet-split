@@ -27,7 +27,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging"  % "3.9.2",
   "ch.qos.logback"             % "logback-classic" % "1.2.3",
   // Test
-  "org.scalatest" %% "scalatest" % "3.2.3" % "test"
+  "org.scalatest" %% "scalatest" % "3.2.3" % "test",
+  "org.mockito" %% "mockito-scala" % "1.16.37" % "test",
 )
 
 testOptions in Test += Tests.Argument(

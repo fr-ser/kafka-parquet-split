@@ -10,6 +10,10 @@ import scalaz.std.list._
 
 import java.nio.file.Files
 
+sealed trait AppError
+case class ParsingError(message: String) extends AppError
+case class UnknownError(e: Throwable)    extends AppError
+
 object ParquetParser extends LazyLogging {
 
   implicit val encodeParquet: Encoder[RowParquetRecord] = (row: RowParquetRecord) => {
@@ -42,7 +46,7 @@ object ParquetParser extends LazyLogging {
     * @param data a parquet file with no particular schema.
     * @return list of JSON documents (one document per input/Parquet row)
     */
-  def parseAndSplit(data: Array[Byte]): Either[String, List[Json]] = {
+  def parseAndSplit(data: Array[Byte]): Either[AppError, List[Json]] = {
     Files.write(tmpFile, data)
 
     val readData = ParquetReader.read[RowParquetRecord](tmpFile.toString)
@@ -51,14 +55,15 @@ object ParquetParser extends LazyLogging {
         .map(record => {
           val encodedRow = record.asJson
           encodedRow.isObject match {
-            case false => Left(encodedRow.noSpaces)
+            case false => Left(ParsingError(encodedRow.noSpaces))
             case true  => Right(encodedRow)
           }
         })
         .toList
       Traverse[List].sequence(recordList)
     } catch {
-      case e: Throwable => Left(e.toString)
+      case e: Throwable if e.toString.contains("is not a Parquet file") => Left(ParsingError("invalid parquet file"))
+      case e: Throwable => Left(UnknownError(e))
     } finally readData.close()
   }
 }
