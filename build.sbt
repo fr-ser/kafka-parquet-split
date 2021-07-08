@@ -4,8 +4,13 @@ version := "1.0.0"
 
 scalaVersion := "2.13.5"
 
-lazy val kafkaVersion = "2.6.2"
+enablePlugins(CucumberPlugin)
 
+CucumberPlugin.monochrome := false
+CucumberPlugin.glues := List("com.feature")
+CucumberPlugin.mainClass := "io.cucumber.core.cli.Main"
+
+lazy val kafkaVersion = "2.6.2"
 lazy val circeVersion = "0.12.3"
 
 libraryDependencies ++= Seq(
@@ -27,9 +32,20 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging"  % "3.9.2",
   "ch.qos.logback"             % "logback-classic" % "1.2.3",
   // Test
-  "org.scalatest" %% "scalatest" % "3.2.3" % "test",
-  "org.mockito" %% "mockito-scala" % "1.16.37" % "test",
+  "org.scalatest" %% "scalatest"      % "3.2.3"   % "test",
+  "org.mockito"   %% "mockito-scala"  % "1.16.37" % "test",
+  "io.cucumber"   %% "cucumber-scala" % "4.7.1"   % "test",
+  "io.cucumber"   % "cucumber-jvm"    % "4.7.1"   % "test",
+  "io.cucumber"   % "cucumber-junit"  % "4.7.1"   % "test"
 )
+
+mainClass in assembly := Some("com.example.Application")
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", "services", "org.apache.hadoop.fs.FileSystem") => MergeStrategy.filterDistinctLines
+  case PathList("META-INF", _ @ _*) => MergeStrategy.discard
+  case _ => MergeStrategy.first
+}
+assemblyOutputPath in assembly := file("target/application.jar")
 
 testOptions in Test += Tests.Argument(
   TestFrameworks.ScalaCheck,

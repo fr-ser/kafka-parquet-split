@@ -21,9 +21,7 @@ case class ParquetSplit() extends LazyLogging {
   case object AppProcessorTransformer extends ValueTransformer[Array[Byte], Iterable[String]] {
     private var context: ProcessorContext = null
 
-    override def init(context: ProcessorContext): Unit = {
-      this.context = context
-    }
+    override def init(context: ProcessorContext): Unit = this.context = context
 
     override def transform(parquetByteArray: Array[Byte]): List[String] = {
       ParquetParser.parseAndSplit(parquetByteArray) match {
@@ -31,7 +29,9 @@ case class ParquetSplit() extends LazyLogging {
         case Left(ParsingError(_)) =>
           logger.error(f"Invalid message at offset ${this.context.offset()}")
           List.empty[String]
-        case Left(_) => List.empty[String]
+        case Left(error) =>
+          logger.error(f"Error at offset ${this.context.offset()}: ${error.toString}")
+          List.empty[String]
       }
     }
 

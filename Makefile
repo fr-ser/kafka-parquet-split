@@ -15,20 +15,20 @@ integration-test-no-bootstrap:
 	@echo "" && echo ""
 
 start-app:
-	docker-compose build filter-build-cache
-	docker-compose up --build --detach filter
+	docker-compose build app-build-cache
+	docker-compose up --build --detach app
 
 	@echo "Waiting for the app"
 
 	@until [ $${counter:-0} -gt 20 ]; \
 	do \
-		if docker-compose logs filter | grep -q "Current state is: RUNNING" ; then \
+		if docker-compose logs app | grep -q "Current state is: RUNNING" ; then \
 			break; \
 		fi; \
 		counter=$$(($$counter+1)); \
 	done;
 
-	docker-compose logs filter | grep -q "Current state is: RUNNING" || (docker-compose logs saver; exit 1)
+	docker-compose logs app | grep -q "Current state is: RUNNING" || (docker-compose logs app; exit 1)
 	@echo "started and ready"
 
 unit-test:
@@ -36,7 +36,7 @@ unit-test:
 	sbt test
 	@echo "" && echo ""
 
-test: unit-test integration-test
+tests: unit-test integration-test
 
 teardown:
 	docker-compose down --remove-orphans --volumes --timeout=5

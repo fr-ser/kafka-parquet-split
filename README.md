@@ -5,11 +5,7 @@ This application reads data from a topic containing parquet files and splits tho
 
 ## ToDos
 
-- publish to kafka rows as JSON
-- run e2e test with cucumber
-- "extends App" is threading an issue here?
-- run app within docker
+- run e2e test with current cucumber version
 - update sbt version
 - run tests in CI (GitHub actions?)
-- try other parquet packages
 - search for the word ToDo to make sure no comment is forgotten
