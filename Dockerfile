@@ -1,5 +1,5 @@
-FROM hseeberger/scala-sbt:11.0.10_1.4.7_2.13.5 AS builder
-# Java 11.0.10., SBT 1.4.7, Scala 2.13.5
+FROM hseeberger/scala-sbt:11.0.11_1.5.4_2.13.6 AS builder
+# Java 11.0.11., SBT 1.5.4, Scala 2.13.6
 
 WORKDIR /app
 COPY build.sbt /app

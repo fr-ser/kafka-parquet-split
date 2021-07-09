@@ -2,14 +2,14 @@ package com.feature
 
 import com.example.AppConfig
 import com.github.mjakubowski84.parquet4s._
-import cucumber.api.scala.{EN, ScalaDsl}
+import io.cucumber.scala.{EN, ScalaDsl}
 import io.circe.parser._
 import io.cucumber.datatable.DataTable
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.{BINARY, BOOLEAN, DOUBLE, INT64}
 import org.apache.parquet.schema.Type.Repetition.REQUIRED
-import org.apache.parquet.schema.{LogicalTypeAnnotation, Types}
+import org.apache.parquet.schema.{LogicalTypeAnnotation, MessageType, Types}
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import pureconfig.ConfigSource
 import pureconfig.generic.auto._
@@ -39,7 +39,7 @@ class StepDefinitions extends ScalaDsl with EN {
     !consumer.assignment().isEmpty
   }
 
-  After(_ => {
+  After.apply(_ => {
     producer.close()
     consumer.close()
   })
@@ -57,7 +57,7 @@ class StepDefinitions extends ScalaDsl with EN {
       lambdaB: (String, Boolean) => Unit,
       lambdaL: (String, Long) => Unit,
       lambdaD: (String, Double) => Unit
-    ) = {
+    ): Unit = {
       map.foreach {
         case (key, value) =>
           parse(value) match {
@@ -79,7 +79,7 @@ class StepDefinitions extends ScalaDsl with EN {
 
     val rows = dataTable.asMaps().asScala.map { rawTableRow =>
       {
-        val parquetRow = RowParquetRecord.empty;
+        val parquetRow = RowParquetRecord.empty
         matcher(
           rawTableRow.asScala.toMap,
           (key, value) => {
@@ -98,7 +98,7 @@ class StepDefinitions extends ScalaDsl with EN {
             parquetRow.add(key, DoubleValue(value))
             ()
           }
-        );
+        )
         parquetRow
       }
     }
@@ -124,10 +124,10 @@ class StepDefinitions extends ScalaDsl with EN {
             schemaBuilder.addField(Types.primitive(DOUBLE, REQUIRED).named(key))
             ()
           }
-        );
+        )
       }
     }
-    implicit val rowSchema = schemaBuilder.named("GenericSchema")
+    implicit val rowSchema: MessageType = schemaBuilder.named("GenericSchema")
     ParquetWriter.writeAndClose(s"$path/rows.parquet", rows)
     val byteArray = Files.readAllBytes(Paths.get(s"$path/rows.parquet"))
 
@@ -150,5 +150,4 @@ class StepDefinitions extends ScalaDsl with EN {
         }
     }
   }
-
 }

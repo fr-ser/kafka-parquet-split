@@ -1,2 +1,2 @@
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.10")
-addSbtPlugin("com.waioeka.sbt" % "cucumber-plugin" % "0.2.1")
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "1.0.0")
+addSbtPlugin("com.waioeka.sbt" % "cucumber-plugin" % "0.3.1")

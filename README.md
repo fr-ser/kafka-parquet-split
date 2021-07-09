@@ -5,7 +5,5 @@ This application reads data from a topic containing parquet files and splits tho
 
 ## ToDos
 
-- run e2e test with current cucumber version
-- update sbt version
 - run tests in CI (GitHub actions?)
 - search for the word ToDo to make sure no comment is forgotten

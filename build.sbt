@@ -2,7 +2,7 @@ organization := "com.example"
 name := "parquet-split"
 version := "1.0.0"
 
-scalaVersion := "2.13.5"
+scalaVersion := "2.13.6"
 
 enablePlugins(CucumberPlugin)
 
@@ -18,36 +18,34 @@ libraryDependencies ++= Seq(
   "org.apache.kafka" %% "kafka-streams-scala"     % kafkaVersion,
   "org.apache.kafka" % "kafka-streams-test-utils" % kafkaVersion % "test",
   // parquet parsing
-  "com.github.mjakubowski84" %% "parquet4s-core" % "1.9.1",
-  "org.apache.hadoop"        % "hadoop-client"   % "3.3.0",
+  "com.github.mjakubowski84" %% "parquet4s-core" % "1.9.2",
+  "org.apache.hadoop"        % "hadoop-client"   % "3.3.1",
   // json parsing
   "io.circe" %% "circe-core"    % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser"  % circeVersion,
   // functional utilities
-  "org.scalaz" %% "scalaz-core" % "7.3.3",
+  "org.scalaz" %% "scalaz-core" % "7.3.4",
   // config loading
   "com.github.pureconfig" %% "pureconfig" % "0.15.0",
   // logging
-  "com.typesafe.scala-logging" %% "scala-logging"  % "3.9.2",
+  "com.typesafe.scala-logging" %% "scala-logging"  % "3.9.4",
   "ch.qos.logback"             % "logback-classic" % "1.2.3",
   // Test
-  "org.scalatest" %% "scalatest"      % "3.2.3"   % "test",
+  "org.scalatest" %% "scalatest"      % "3.2.9"   % "test",
   "org.mockito"   %% "mockito-scala"  % "1.16.37" % "test",
-  "io.cucumber"   %% "cucumber-scala" % "4.7.1"   % "test",
-  "io.cucumber"   % "cucumber-jvm"    % "4.7.1"   % "test",
-  "io.cucumber"   % "cucumber-junit"  % "4.7.1"   % "test"
+  "io.cucumber"   %% "cucumber-scala" % "6.10.4"   % "test",
 )
 
-mainClass in assembly := Some("com.example.Application")
-assemblyMergeStrategy in assembly := {
+assembly / mainClass := Some("com.example.Application")
+assembly / assemblyMergeStrategy  := {
   case PathList("META-INF", "services", "org.apache.hadoop.fs.FileSystem") => MergeStrategy.filterDistinctLines
   case PathList("META-INF", _ @ _*) => MergeStrategy.discard
   case _ => MergeStrategy.first
 }
-assemblyOutputPath in assembly := file("target/application.jar")
+assembly / assemblyOutputPath  := file("target/application.jar")
 
-testOptions in Test += Tests.Argument(
+Test / testOptions += Tests.Argument(
   TestFrameworks.ScalaCheck,
   "-maxSize",
   "5",
